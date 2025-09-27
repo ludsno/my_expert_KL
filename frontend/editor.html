@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor da Base de Conhecimento</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1 class="titulo-principal">Editor da Base de Conhecimento</h1>
+        <a href="index.html" class="nav-link nav-link-editor">Voltar para a Consulta</a>
+    </header>
+
+    <main class="editor-main">
+        <section class="editor-section">
+            <h2 class="subtitulo">Gerenciar Variáveis</h2>
+            <form id="form-variavel">
+                <h3 class="subtitulo">Adicionar Nova Variável</h3>
+                <div class="form-group">
+                    <label for="var-nome">Nome da Variável:</label>
+                    <input type="text" id="var-nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="var-tipo">Tipo:</label>
+                    <select id="var-tipo">
+                        <option value="univalorada">Univalorada (texto)</option>
+                        <option value="numerica">Numérica</option>
+                    </select>
+                </div>
+                <div class="form-group hidden" id="campo-valores-possiveis">
+                    <label for="var-valores">Valores Possíveis (separados por vírgula):</label>
+                    <input type="text" id="var-valores">
+                </div>
+
+                <div class="form-group hidden" id="campo-range-numerico">
+                    <label>Range (Opcional):</label>
+                    <div class="range-inputs">
+                        <input type="number" id="var-min" placeholder="Mínimo">
+                        <input type="number" id="var-max" placeholder="Máximo">
+                    </div>
+                </div>
+
+                <button type="submit">Salvar Variável</button>
+            </form>
+            <div class="lista-container">
+                <h3 class="subtitulo">Variáveis Existentes</h3>
+                <ul id="lista-variaveis">
+                    <li>Carregando...</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="editor-section">
+            <h2 class="subtitulo">Gerenciar Regras</h2>
+            <form id="form-regra">
+                <h3 class="subtitulo">Adicionar Nova Regra</h3>
+                <div class="form-group">
+                    <label for="regra-nome">Nome da Regra:</label>
+                    <input type="text" id="regra-nome" required>
+                </div>
+
+                <div class="condicao-bloco">
+                    <h4>Condições (SE)</h4>
+                    <div id="condicoes-se">
+                    </div>
+                    <button type="button" id="btn-add-condicao-se">Adicionar Condição</button>
+                </div>
+
+                <div class="condicao-bloco">
+                    <h4>Conclusões (ENTÃO)</h4>
+                    <div id="conclusoes-entao">
+                    </div>
+                    <button type="button" id="btn-add-conclusao-entao">Adicionar Conclusão</button>
+                </div>
+
+                <button type="submit" class="btn-salvar-regra">Salvar Regra</button>
+            </form>
+            <div class="lista-container">
+                <h3 class="subtitulo">Regras Existentes</h3>
+                <ul id="lista-regras">
+                    <li>Carregando...</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/editor.js"></script>
+</body>
+
+</html>

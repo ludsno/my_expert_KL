@@ -1,0 +1,404 @@
+/* Títulos e links simplificados */
+.titulo-principal {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.nav-link-editor {
+    font-size: 0.95rem;
+}
+.subtitulo {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 0.7rem;
+}
+.label-objetivo {
+    font-size: 0.98rem;
+}
+.btn-espacado {
+    margin-top: 0.7rem;
+}
+.explicacao-titulo {
+    font-size: 0.98rem;
+    margin-bottom: 0.5rem;
+}
+
+/* frontend/css/style.css */
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0 0 24px 0;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.2rem;
+    color: #222;
+}
+
+button {
+    background: linear-gradient(180deg, #fafdff 0%, #dbe2e8 100%);
+    color: #222;
+    border: 1.5px solid #bfc3c8;
+    box-shadow: 0 1.5px 0 #fff inset, 0 1.5px 4px 0 rgba(180,185,190,0.08);
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s;
+    font-weight: 500;
+    text-shadow: 0 1px 0 #fff;
+}
+
+main {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 32px;
+    margin-bottom: 0;
+}
+
+button:hover {
+    background: linear-gradient(180deg, #e5e7ea 0%, #cfd2d6 100%);
+    color: #1d4ed8;
+    border-color: #aab0b7;
+    box-shadow: 0 2.5px 0 #fff inset, 0 2px 8px 0 rgba(120,130,140,0.10);
+}
+
+section {
+    margin-bottom: 1.2rem;
+    border: none;
+    padding-top: 0.5rem;
+}
+
+#dialogo-box {
+    border: 1.2px solid #d3d6da;
+    padding: 0.7rem;
+    height: 220px;
+    overflow-y: auto;
+    margin-bottom: 0.7rem;
+    background: linear-gradient(180deg, #fafdff 0%, #e7e9ec 100%);
+    font-size: 0.98rem;
+    border-radius: 7px;
+    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
+}
+
+.hidden {
+    display: none;
+}
+
+.mensagem-sistema {
+    background: linear-gradient(180deg, #f6f7fa 0%, #e5e7ea 100%);
+    align-self: flex-start;
+    border: 1px solid #e0e3e7;
+    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.06);
+}
+
+/* Formulários e Botões */
+.form-group {
+    margin-bottom: 0.7rem;
+}
+
+.mensagem-usuario {
+    background: linear-gradient(180deg, #f7faf6 0%, #e5eae3 100%);
+    align-self: flex-end;
+    text-align: right;
+    margin-left: auto;
+    border: 1px solid #e0e3e7;
+    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.06);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 0.6rem;
+    /* As propriedades abaixo estavam misturadas em #resultado-final */
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #fafbfc;
+}
+
+#resultado-final {
+    background: linear-gradient(180deg, #fafdff 0%, #e7e9ec 100%);
+    border: 1.2px solid #d3d6da;
+    padding: 0.7rem;
+    border-radius: 7px;
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 0.7rem;
+    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
+}
+
+#explicacao-como li {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
+    padding: 0.35rem 0.5rem;
+    margin-bottom: 0.15rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+    border: 1px solid #e0e3e7;
+    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.04);
+}
+
+/* Definição de botão duplicada encontrada no código original */
+button {
+    background: #e9ecef;
+    color: #222;
+    border: 1px solid #d0d0d0;
+    cursor: pointer;
+    transition: background 0.18s;
+    font-weight: 500;
+}
+
+.lista-container li {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
+    padding: 0.35rem 0.5rem;
+    margin-bottom: 0.15rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+    border: 1px solid #e0e3e7;
+    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.04);
+}
+
+/* Definição de button:hover duplicada encontrada no código original */
+button:hover {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-color: #b6d4fe;
+}
+
+/* Estilos do Diálogo */
+.condicao-bloco {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
+    border: 1.2px solid #d3d6da;
+    border-radius: 7px;
+    padding: 0.7rem 0.7rem 0.5rem 0.7rem;
+    margin-bottom: 0.7rem;
+    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
+}
+
+/* Definição de #dialogo-box duplicada encontrada no código original */
+#dialogo-box {
+    border: 1px solid #f0f0f0;
+    padding: 0.7rem;
+    height: 220px;
+    overflow-y: auto;
+    margin-bottom: 0.7rem;
+    background: #fcfcfc;
+    font-size: 0.98rem;
+}
+
+.mensagem {
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    max-width: 90%;
+    font-size: 0.98rem;
+}
+
+/* Definição de .mensagem-sistema duplicada encontrada no código original */
+.mensagem-sistema {
+    background: #f1f5f9;
+    align-self: flex-start;
+}
+
+/* Definição de .mensagem-usuario duplicada encontrada no código original */
+.mensagem-usuario {
+    background: #f3f8f3;
+    align-self: flex-end;
+    text-align: right;
+    margin-left: auto;
+}
+
+/* Área de Resultado */
+/* Definição de #resultado-final duplicada encontrada no código original */
+#resultado-final {
+    background: #f6fef7;
+    border: 1px solid #e0f2e9;
+    padding: 0.7rem;
+    border-radius: 4px;
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 0.7rem;
+}
+
+/* Definição de #explicacao-como li duplicada encontrada no código original */
+#explicacao-como li {
+    background: #f7f7f7;
+    padding: 0.35rem 0.5rem;
+    margin-bottom: 0.15rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+}
+
+/* Editor visual simplificado */
+.editor-main {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 32px;
+    margin-bottom: 0;
+    background: #fff;
+    padding: 1rem 0.2rem 1.2rem 0.2rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+.editor-section {
+    margin-bottom: 1.2rem;
+    border: none;
+    padding-top: 0.5rem;
+}
+
+.lista-container {
+    margin-top: 1.1rem;
+}
+
+.lista-container ul {
+    padding-left: 1.1rem;
+    margin: 0.3rem 0 0 0;
+}
+
+/* Definição de .lista-container li duplicada encontrada no código original */
+.lista-container li {
+    background: #f7f7f7;
+    padding: 0.35rem 0.5rem;
+    margin-bottom: 0.15rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+}
+
+/* Definição de .condicao-bloco duplicada encontrada no código original */
+.condicao-bloco {
+    background: #fafbfc;
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+    padding: 0.7rem 0.7rem 0.5rem 0.7rem;
+    margin-bottom: 0.7rem;
+}
+
+.condicao-bloco h4 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+}
+
+.btn-salvar-regra {
+    margin-top: 0.7rem;
+}
+
+.nav-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* Definição de .editor-main duplicada encontrada no código original */
+.editor-main {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* Definição de .editor-section duplicada encontrada no código original */
+.editor-section {
+    flex: 1;
+    background-color: #fdfdfd;
+    padding: 1.5rem;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+/* Definição de .lista-container duplicada encontrada no código original */
+.lista-container {
+    margin-top: 2rem;
+}
+
+.lista-container h3 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+#lista-variaveis li,
+#lista-regras li {
+    background-color: #f9f9f9;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #efefef;
+}
+
+/* Definição de .condicao-bloco duplicada encontrada no código original */
+.condicao-bloco {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.condicao-linha {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.condicao-linha select,
+.condicao-linha input {
+    flex: 1;
+}
+
+/* Definição de .btn-salvar-regra duplicada encontrada no código original */
+.btn-salvar-regra {
+    margin-top: 1rem;
+    background-color: #27ae60;
+}
+
+.btn-salvar-regra:hover {
+    background-color: #229954;
+}
+
+/* Regras adicionais do final do arquivo */
+.lista-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #efefef;
+}
+
+.item-acoes button {
+    margin-left: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    width: auto; /* Sobrescreve a largura de 100% */
+}
+
+.btn-editar {
+    background-color: #f39c12;
+}
+
+.btn-editar:hover {
+    background-color: #e67e22;
+}
+
+.btn-apagar {
+    background-color: #e74c3c;
+}
+
+.btn-apagar:hover {
+    background-color: #c0392b;
+}

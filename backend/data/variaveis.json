@@ -1,0 +1,82 @@
+[
+    {
+        "nome": "Age",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "YearsAtCompany",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "MonthlyIncome",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "OverTime",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Yes",
+            "No"
+        ],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "DistanceFromHome",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "JobSatisfaction",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": 1,
+        "max_val": 4
+    },
+    {
+        "nome": "JobInvolvement",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": 1,
+        "max_val": 4
+    },
+    {
+        "nome": "WorkLifeBalance",
+        "tipo": "numerica",
+        "valores_possiveis": [],
+        "min_val": 1,
+        "max_val": 4
+    },
+    {
+        "nome": "BusinessTravel",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Travel_Frequently",
+            "Travel_Rarely",
+            "Non-Travel"
+        ],
+        "min_val": null,
+        "max_val": null
+    },
+    {
+        "nome": "Attrition",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Yes",
+            "No"
+        ],
+        "min_val": null,
+        "max_val": null
+    }
+]

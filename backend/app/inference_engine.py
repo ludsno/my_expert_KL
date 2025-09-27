@@ -1,0 +1,141 @@
+# backend/app/inference_engine.py
+
+from .models import BaseConhecimento, Condicao
+
+
+# --- Exceção Customizada ---
+class AskUserException(Exception):
+    def __init__(self, variavel, regra_contexto=None):
+        self.variavel = variavel
+        self.regra_contexto = regra_contexto
+
+
+# --- Função de Avaliação Simplificada ---
+def avaliar_condicao_com_valor(condicao: Condicao, valor):
+    op = condicao.operador
+    alvo = condicao.valor
+
+    try:
+        valor_num = float(valor)
+        alvo_num = float(alvo)
+    except (ValueError, TypeError):
+        valor_num = None
+        alvo_num = None
+
+    if op == "==":
+        return valor == alvo
+    if op == "!=":
+        return valor != alvo
+    if valor_num is not None and alvo_num is not None:
+        if op == ">":
+            return valor_num > alvo_num
+        if op == "<":
+            return valor_num < alvo_num
+        if op == ">=":
+            return valor_num >= alvo_num
+        if op == "<=":
+            return valor_num <= alvo_num
+    return False
+
+
+def _combinar_cf(cf1, cf2):
+    """Fórmula de combinação de Fatores de Confiança (variante do MYCIN)."""
+    if cf1 >= 0 and cf2 >= 0:
+        return cf1 + cf2 * (1 - cf1)
+    return max(cf1, cf2)  # Simplificação para outros casos
+
+
+class MotorBackwardChaining:
+    def __init__(self, bc: BaseConhecimento):
+        self.bc = bc
+        self.fatos_sessao = {}
+        for var, val in bc.fatos.items():
+            self.fatos_sessao[var] = (val, 1.0)
+        self.trilha_explicacao = []
+        self.objetivo_inicial = None
+
+    def adicionar_resposta(self, variavel: str, valor):
+        self.fatos_sessao[variavel] = (valor, 1.0)
+        return self.provar_objetivo(self.objetivo_inicial)
+
+    def provar_objetivo(self, objetivo: str):
+        self.objetivo_inicial = objetivo
+        try:
+            resultado = self._buscar_valor_para(objetivo)
+            valor, cf = resultado if resultado else (None, 0)
+            return {
+                "tipo": "resultado",
+                "objetivo": objetivo,
+                "valor": valor,
+                "cf": cf,
+                "explicacao_como": [regra.nome for regra in self.trilha_explicacao],
+            }
+        except AskUserException as e:
+            return {
+                "tipo": "pergunta",
+                "variavel": e.variavel,
+                "contexto_porque": e.regra_contexto.nome if e.regra_contexto else None,
+            }
+
+    def _buscar_valor_para(self, variavel_alvo: str, pilha_recursao=None):
+        if pilha_recursao is None:
+            pilha_recursao = set()
+
+        if variavel_alvo in self.fatos_sessao:
+            return self.fatos_sessao[variavel_alvo]
+
+        if variavel_alvo in pilha_recursao:
+            return None
+        pilha_recursao.add(variavel_alvo)
+
+        regras_relevantes = [
+            r
+            for r in self.bc.regras
+            if any(c.variavel == variavel_alvo for c in r.conclusoes_entao)
+        ]
+
+        for regra in regras_relevantes:
+            cf_premissa = 1.0
+            try:
+                for condicao in regra.condicoes_se:
+                    valor_condicao, cf_condicao = self._buscar_valor_para(
+                        condicao.variavel, pilha_recursao
+                    )
+                    if avaliar_condicao_com_valor(condicao, valor_condicao):
+                        cf_premissa = min(cf_premissa, cf_condicao)
+                    else:
+                        cf_premissa = 0
+                        break
+            except AskUserException:
+                raise
+            except TypeError:
+                cf_premissa = 0
+
+            if cf_premissa > 0:
+                for conclusao in regra.conclusoes_entao:
+                    cf_final_conclusao = cf_premissa * getattr(conclusao, "fc", 1.0)
+                    if conclusao.variavel in self.fatos_sessao:
+                        valor_existente, cf_existente = self.fatos_sessao[
+                            conclusao.variavel
+                        ]
+                        if valor_existente == conclusao.valor:
+                            novo_cf = _combinar_cf(cf_existente, cf_final_conclusao)
+                            self.fatos_sessao[conclusao.variavel] = (
+                                conclusao.valor,
+                                novo_cf,
+                            )
+                    else:
+                        self.fatos_sessao[conclusao.variavel] = (
+                            conclusao.valor,
+                            cf_final_conclusao,
+                        )
+                    self.trilha_explicacao.append(regra)
+
+        pilha_recursao.remove(variavel_alvo)
+        if variavel_alvo in self.fatos_sessao:
+            return self.fatos_sessao[variavel_alvo]
+
+        raise AskUserException(variavel_alvo)
+
+
+# fim de inference_engine.py

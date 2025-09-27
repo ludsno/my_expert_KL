@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Especialista</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1 class="titulo-principal">Sistema Especialista</h1>
+        <a href="editor.html" class="nav-link nav-link-editor">Editor da Base de Conhecimento</a>
+    </header>
+
+    <main>
+        <section id="secao-inicio">
+            <h2 class="subtitulo">Nova Consulta</h2>
+            <div class="form-group">
+                <label for="select-objetivo" class="label-objetivo">Qual o seu objetivo?</label>
+                <select id="select-objetivo" disabled>
+                    <option>Carregando variáveis...</option>
+                </select>
+            </div>
+            <button id="btn-iniciar" class="btn-espacado">Iniciar Consulta</button>
+        </section>
+
+        <section id="secao-consulta" class="hidden">
+            <div id="dialogo-box"></div>
+            <div id="area-input-usuario"></div>
+        </section>
+
+        <section id="secao-resultado" class="hidden">
+            <h2 class="subtitulo">Consulta Finalizada</h2>
+            <div id="resultado-final"></div>
+            <div class="explicacao-titulo">Como chegamos a esta conclusão?</div>
+            <ul id="explicacao-como"></ul>
+            <button id="btn-nova-consulta" class="btn-espacado">Nova Consulta</button>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
