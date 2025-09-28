@@ -9,12 +9,16 @@
 </head>
 
 <body>
-    <header>
-        <h1 class="titulo-principal">Editor da Base de Conhecimento</h1>
-        <a href="index.html" class="nav-link nav-link-editor">Voltar para a Consulta</a>
-    </header>
+    <div class="menubar">
+        <div class="menubar-app-title">Sistema Especialista</div>
+        <nav class="menubar-links">
+            <a href="kbs.html" class="menu-link">Bases</a>
+            <a href="consulta.html" class="menu-link">Consulta</a>
+            <a href="editor.html" class="menu-link ativo">Editor</a>
+        </nav>
+    </div>
 
-    <main class="editor-main">
+    <main id="app-shell" class="editor-main">
         <section class="editor-section">
             <h2 class="subtitulo">Gerenciar Variáveis</h2>
             <form id="form-variavel">
@@ -95,6 +99,12 @@
             </div>
         </section>
     </main>
+
+    <div id="status-bar" class="status-bar">
+        <span id="status-kb">KB: (nenhuma)</span>
+        <span id="status-modo">Modo: -</span>
+        <span id="status-objetivo">Objetivo: -</span>
+    </div>
 
     <script src="js/editor.js"></script>
 </body>

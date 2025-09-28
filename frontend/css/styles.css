@@ -1,356 +1,385 @@
-/* Títulos e links simplificados */
-.titulo-principal {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-.nav-link-editor {
-    font-size: 0.95rem;
-}
-.subtitulo {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin-bottom: 0.7rem;
-}
-.label-objetivo {
-    font-size: 0.98rem;
-}
-.btn-espacado {
-    margin-top: 0.7rem;
-}
-.explicacao-titulo {
-    font-size: 0.98rem;
-    margin-bottom: 0.5rem;
-}
-
-/* frontend/css/style.css */
+/* ====== Base Tipografia & Layout ====== */
 body {
     font-family: Helvetica, Arial, sans-serif;
-    background: #fff;
+    background: #e5e5e7;
     color: #222;
-    line-height: 1.5;
+    line-height: 1.45;
     margin: 0;
-    padding: 0 0 24px 0;
+    padding: 0;
 }
+
+/* App shell layout */
+#app-shell {
+    background: #fff;
+    border: 1px solid #b9b9c0;
+    border-radius: 6px;
+    padding: 16px 22px 28px;
+    margin-top: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Menubar (desktop feel) */
+.menubar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 6px 14px;
+    background: linear-gradient(#f7f7f8, #ededf0);
+    border-bottom: 1px solid #b4b4bb;
+    box-shadow: 0 1px 0 #fff inset;
+    font-size: 14px;
+    user-select: none;
+}
+
+.menubar-app-title {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.menubar-links {
+    display: flex;
+    gap: 14px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #222;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.menu-link:hover {
+    background: #dfe3e8;
+    border-color: #c2c6ca;
+}
+
+.menu-link.ativo {
+    background: #cfd3d9;
+    border-color: #b4b8be;
+    font-weight: 600;
+}
+
+/* Status bar */
+.status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 22px;
+    background: linear-gradient(#f0f0f2, #dcdcde);
+    border-top: 1px solid #b4b4bb;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #333;
+    padding: 0 10px;
+    gap: 22px;
+    box-shadow: 0 -1px 0 #fafafa inset;
+}
+
+.status-bar span {
+    opacity: 0.85;
+}
+.status-bar span:not(:last-child)::after { content:""; display:inline-block; height:12px; width:1px; background:#b8b8bd; margin:0 12px; position:relative; top:1px; }
 
 header {
     text-align: center;
     margin-bottom: 1.2rem;
-    color: #222;
-}
-
-button {
-    background: linear-gradient(180deg, #fafdff 0%, #dbe2e8 100%);
-    color: #222;
-    border: 1.5px solid #bfc3c8;
-    box-shadow: 0 1.5px 0 #fff inset, 0 1.5px 4px 0 rgba(180,185,190,0.08);
-    cursor: pointer;
-    transition: background 0.18s, box-shadow 0.18s;
-    font-weight: 500;
-    text-shadow: 0 1px 0 #fff;
 }
 
 main {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 32px;
-    margin-bottom: 0;
-}
-
-button:hover {
-    background: linear-gradient(180deg, #e5e7ea 0%, #cfd2d6 100%);
-    color: #1d4ed8;
-    border-color: #aab0b7;
-    box-shadow: 0 2.5px 0 #fff inset, 0 2px 8px 0 rgba(120,130,140,0.10);
+    max-width: 860px;
+    margin: 0 auto 48px;
 }
 
 section {
-    margin-bottom: 1.2rem;
-    border: none;
-    padding-top: 0.5rem;
-}
-
-#dialogo-box {
-    border: 1.2px solid #d3d6da;
-    padding: 0.7rem;
-    height: 220px;
-    overflow-y: auto;
-    margin-bottom: 0.7rem;
-    background: linear-gradient(180deg, #fafdff 0%, #e7e9ec 100%);
-    font-size: 0.98rem;
-    border-radius: 7px;
-    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
+    margin-bottom: 1.4rem;
 }
 
 .hidden {
     display: none;
 }
 
-.mensagem-sistema {
-    background: linear-gradient(180deg, #f6f7fa 0%, #e5e7ea 100%);
-    align-self: flex-start;
-    border: 1px solid #e0e3e7;
-    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.06);
+/* ====== Títulos ====== */
+.titulo-principal {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0.2rem 0 0.4rem;
 }
 
-/* Formulários e Botões */
-.form-group {
-    margin-bottom: 0.7rem;
-}
-
-.mensagem-usuario {
-    background: linear-gradient(180deg, #f7faf6 0%, #e5eae3 100%);
-    align-self: flex-end;
-    text-align: right;
-    margin-left: auto;
-    border: 1px solid #e0e3e7;
-    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.06);
-}
-
-label {
-    display: block;
-    margin-bottom: 0.3rem;
+.subtitulo {
+    font-size: 1.1rem;
     font-weight: 500;
+    margin: 0 0 0.6rem;
+}
+
+.explicacao-titulo,
+.label-objetivo {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ====== Botões & Inputs ====== */
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+button {
+    background: #f4f4f4;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+button:hover {
+    background: #e8e8e8;
+}
+
+button:active {
+    background: #ddd;
+}
+button:disabled { background:#efefef; color:#777; cursor:not-allowed; }
+button:focus-visible { outline:2px solid #4d90fe; outline-offset:1px; }
+
+.btn-espacado {
+    margin-top: 0.6rem;
 }
 
 input,
 select,
-button {
+textarea {
     width: 100%;
-    padding: 0.6rem;
-    /* As propriedades abaixo estavam misturadas em #resultado-final */
-    border: 1px solid #e0e0e0;
+    padding: 0.5rem 0.55rem;
+    border: 1px solid #bbb;
     border-radius: 4px;
-    font-size: 1rem;
+    background: #fff;
     box-sizing: border-box;
-    background: #fafbfc;
 }
 
-#resultado-final {
-    background: linear-gradient(180deg, #fafdff 0%, #e7e9ec 100%);
-    border: 1.2px solid #d3d6da;
-    padding: 0.7rem;
-    border-radius: 7px;
-    font-size: 1.05rem;
-    text-align: center;
-    margin-bottom: 0.7rem;
-    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 1px solid #666;
+    border-color: #666;
+}
+input:disabled,
+select:disabled,
+textarea:disabled { background:#f3f3f3; color:#777; }
+
+/* ====== Form Groups ====== */
+.form-group {
+    margin-bottom: 0.75rem;
 }
 
-#explicacao-como li {
-    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
-    padding: 0.35rem 0.5rem;
-    margin-bottom: 0.15rem;
-    border-radius: 3px;
-    font-size: 0.97rem;
-    border: 1px solid #e0e3e7;
-    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.04);
-}
-
-/* Definição de botão duplicada encontrada no código original */
-button {
-    background: #e9ecef;
-    color: #222;
-    border: 1px solid #d0d0d0;
-    cursor: pointer;
-    transition: background 0.18s;
+label {
+    display: block;
+    margin: 0 0 0.25rem;
     font-weight: 500;
 }
 
-.lista-container li {
-    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
-    padding: 0.35rem 0.5rem;
-    margin-bottom: 0.15rem;
-    border-radius: 3px;
-    font-size: 0.97rem;
-    border: 1px solid #e0e3e7;
-    box-shadow: 0 1px 2px 0 rgba(180,185,190,0.04);
-}
-
-/* Definição de button:hover duplicada encontrada no código original */
-button:hover {
-    background: #dbeafe;
-    color: #1d4ed8;
-    border-color: #b6d4fe;
-}
-
-/* Estilos do Diálogo */
-.condicao-bloco {
-    background: linear-gradient(180deg, #f8f9fa 0%, #e5e7ea 100%);
-    border: 1.2px solid #d3d6da;
-    border-radius: 7px;
-    padding: 0.7rem 0.7rem 0.5rem 0.7rem;
-    margin-bottom: 0.7rem;
-    box-shadow: 0 1px 4px 0 rgba(180,185,190,0.07);
-}
-
-/* Definição de #dialogo-box duplicada encontrada no código original */
+/* ====== Chat / Diálogo ====== */
 #dialogo-box {
-    border: 1px solid #f0f0f0;
-    padding: 0.7rem;
-    height: 220px;
+    border: 1px solid #c2c2c7;
+    padding: 0.6rem;
+    height: 240px;
     overflow-y: auto;
-    margin-bottom: 0.7rem;
-    background: #fcfcfc;
-    font-size: 0.98rem;
+    margin-bottom: 0.8rem;
+    background: #fbfbfc;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #fff inset;
 }
 
 .mensagem {
-    padding: 0.5rem 0.7rem;
+    padding: 0.45rem 0.6rem;
     border-radius: 6px;
-    margin-bottom: 0.5rem;
-    max-width: 90%;
-    font-size: 0.98rem;
+    margin-bottom: 4px;
+    max-width: 80%;
+    font-size: 0.9rem;
+    line-height: 1.3;
 }
+.mensagem + .mensagem { margin-top:0; }
 
-/* Definição de .mensagem-sistema duplicada encontrada no código original */
 .mensagem-sistema {
-    background: #f1f5f9;
-    align-self: flex-start;
+    background: #f2f2f2;
+    border: 1px solid #d6d6d6;
 }
 
-/* Definição de .mensagem-usuario duplicada encontrada no código original */
 .mensagem-usuario {
-    background: #f3f8f3;
-    align-self: flex-end;
+    background: #e9f5ff;
+    border: 1px solid #c6e2f5;
+    margin-left: auto;
     text-align: right;
-    margin-left: auto;
 }
 
-/* Área de Resultado */
-/* Definição de #resultado-final duplicada encontrada no código original */
+/* Pequeno triângulo (fala) */
+/* removido triângulo para visual mais simples */
+
+/* ====== Resultado & Explicação ====== */
 #resultado-final {
-    background: #f6fef7;
-    border: 1px solid #e0f2e9;
-    padding: 0.7rem;
+    background: #f5f6f7;
+    border: 1px solid #c2c2c7;
+    padding: 0.65rem;
     border-radius: 4px;
-    font-size: 1.05rem;
-    text-align: center;
-    margin-bottom: 0.7rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+#resultado-final:empty { display:none; }
+
+#explicacao-como {
+    padding-left: 1rem;
+    margin: 0;
 }
 
-/* Definição de #explicacao-como li duplicada encontrada no código original */
 #explicacao-como li {
-    background: #f7f7f7;
-    padding: 0.35rem 0.5rem;
-    margin-bottom: 0.15rem;
-    border-radius: 3px;
-    font-size: 0.97rem;
-}
-
-/* Editor visual simplificado */
-.editor-main {
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 32px;
-    margin-bottom: 0;
+    list-style: disc;
+    margin: 0 0 0.3rem;
+    font-size: 0.8rem;
     background: #fff;
-    padding: 1rem 0.2rem 1.2rem 0.2rem;
-    border-radius: 10px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    border: 1px solid #ddd;
+    padding: 0.3rem 0.45rem;
+    border-radius: 4px;
 }
 
-.editor-section {
-    margin-bottom: 1.2rem;
-    border: none;
-    padding-top: 0.5rem;
+/* ====== Lista de KBs ====== */
+#lista-kbs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.6rem;
 }
 
-.lista-container {
-    margin-top: 1.1rem;
-}
-
-.lista-container ul {
-    padding-left: 1.1rem;
-    margin: 0.3rem 0 0 0;
-}
-
-/* Definição de .lista-container li duplicada encontrada no código original */
-.lista-container li {
-    background: #f7f7f7;
-    padding: 0.35rem 0.5rem;
-    margin-bottom: 0.15rem;
-    border-radius: 3px;
-    font-size: 0.97rem;
-}
-
-/* Definição de .condicao-bloco duplicada encontrada no código original */
-.condicao-bloco {
-    background: #fafbfc;
-    border: 1px solid #f0f0f0;
-    border-radius: 5px;
-    padding: 0.7rem 0.7rem 0.5rem 0.7rem;
-    margin-bottom: 0.7rem;
-}
-
-.condicao-bloco h4 {
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 0 0 0.5rem 0;
-}
-
-.btn-salvar-regra {
-    margin-top: 0.7rem;
-}
-
-.nav-link {
-    display: inline-block;
-    margin-top: 1rem;
-    color: gray;
-    text-decoration: none;
-}
-
-/* Definição de .editor-main duplicada encontrada no código original */
-.editor-main {
+#lista-kbs .lista-item {
     display: flex;
-    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    background: #f4f5f6;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #c5c5ca;
+    border-radius: 4px;
+    margin-bottom: 0.4rem;
+    font-size: 0.84rem;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+#lista-kbs .lista-item.kb-ativa {
+    background: #dce9f4;
+    border-color: #98bdd6;
+}
+
+#lista-kbs .lista-item span {
+    flex: 1;
+    font-weight: 500;
+}
+
+#lista-kbs .item-acoes {
+    display: flex;
+    gap: 0.4rem;
+}
+
+#lista-kbs button {
+    width: auto;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+#kb-ativa-info {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 0.3rem 0 0;
+    font-style: italic;
+}
+
+/* ====== Editor ====== */
+.editor-main {
+    max-width: 1000px;
+    margin: 32px auto 0;
+    display: flex;
+    gap: 1.8rem;
     align-items: flex-start;
 }
 
-/* Definição de .editor-section duplicada encontrada no código original */
 .editor-section {
     flex: 1;
-    background-color: #fdfdfd;
-    padding: 1.5rem;
-    border-radius: 5px;
-    border: 1px solid #eee;
+    background: #fbfbfc;
+    border: 1px solid #b9b9c0;
+    border-radius: 6px;
+    padding: 1rem 1rem 1.1rem;
+    box-shadow: 0 0 0 1px #fff inset;
 }
 
-/* Definição de .lista-container duplicada encontrada no código original */
 .lista-container {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .lista-container h3 {
-    border-bottom: 2px solid #eee;
-    padding-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eceff2;
 }
 
 #lista-variaveis li,
 #lista-regras li {
-    background-color: #f9f9f9;
-    padding: 0.75rem;
+    background: #f4f4f6;
+    border: 1px solid #c5c5ca;
+    padding: 0.48rem 0.55rem;
     border-radius: 4px;
-    margin-bottom: 0.5rem;
-    border: 1px solid #efefef;
+    margin-bottom: 0.38rem;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 0 1px #fff inset;
 }
 
-/* Definição de .condicao-bloco duplicada encontrada no código original */
+#lista-variaveis li .item-acoes,
+#lista-regras li .item-acoes {
+    display: flex;
+    gap: 0.4rem;
+}
+
+/* Condições */
 .condicao-bloco {
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    margin: 1rem 0;
+    background: #fbfbfc;
+    border: 1px solid #c2c2c7;
+    border-radius: 6px;
+    padding: 0.6rem 0.6rem 0.5rem;
+    margin: 0.75rem 0 0.9rem;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+.condicao-bloco h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+
+/* Mensagens de intervalo numérico */
+.msg-range {
+    font-size: 0.7rem;
+    color: #555;
+    margin: 0.3rem 0 0.2rem;
+}
+
+.msg-range.erro {
+    color: #a40000;
+    font-weight: 600;
 }
 
 .condicao-linha {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
-    align-items: center;
 }
 
 .condicao-linha select,
@@ -358,3 +387,43 @@ button:hover {
     flex: 1;
 }
 
+/* Links */
+.nav-link,
+.nav-link-editor {
+    color: #4c5760;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.nav-link:hover,
+.nav-link-editor:hover {
+    text-decoration: underline;
+}
+
+/* Explicação Botão */
+.btn-explicacao {
+    background: #f4f4f4;
+    border: 1px solid #bbb;
+    color: #222;
+}
+
+.btn-explicacao:hover {
+    background: #e8e8e8;
+}
+
+/* Suporte responsivo mínimo */
+@media (max-width: 840px) {
+    .editor-main {
+        flex-direction: column;
+    }
+
+    #dialogo-box {
+        height: 200px;
+    }
+}
+
+/* Reusable modal components */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.32); display:flex; align-items:center; justify-content:center; z-index:9999; }
+.modal-box { background:#ffffff; border:1px solid #b9b9c0; border-radius:8px; padding:20px 24px 22px; width:340px; box-shadow:0 8px 28px rgba(0,0,0,0.28), 0 0 0 1px #fff inset; display:flex; flex-direction:column; gap:14px; }
+.modal-box h3 { margin:0 0 4px; font-size:15px; font-weight:600; }
+.modal-actions { display:flex; flex-direction:column; gap:10px; }

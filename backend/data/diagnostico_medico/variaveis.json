@@ -1,0 +1,95 @@
+[
+    {
+        "nome": "Febre",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Nenhuma",
+            "Baixa (37.5-38.5°C)",
+            "Alta (>38.5°C)"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "Como está a febre do paciente?",
+        "explicacao": "A intensidade da febre é um sintoma chave. Febres altas são mais comuns em Gripe, Dengue e COVID-19."
+    },
+    {
+        "nome": "DoresNoCorpo",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Nenhuma",
+            "Leve",
+            "Intensa"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "O paciente sente dores no corpo (mialgia)?",
+        "explicacao": "Dores musculares intensas e generalizadas são um forte indicativo de Gripe ou Dengue."
+    },
+    {
+        "nome": "DorDeCabeca",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Nenhuma",
+            "Leve",
+            "Intensa (atrás dos olhos)"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "Como está a dor de cabeça do paciente?",
+        "explicacao": "Uma dor de cabeça muito intensa, especialmente com dor na região atrás dos olhos, é um sintoma clássico da Dengue."
+    },
+    {
+        "nome": "SintomasRespiratorios",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Nenhum",
+            "Coriza e Espirros",
+            "Tosse Seca",
+            "Tosse com Secreção",
+            "Falta de Ar"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "Qual o principal sintoma respiratório?",
+        "explicacao": "Ajuda a diferenciar as doenças. Coriza é comum em resfriados, tosse seca em Gripe/COVID, e falta de ar é um sinal de alerta."
+    },
+    {
+        "nome": "PerdaOlfatoPaladar",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "Houve perda súbita de olfato ou paladar?",
+        "explicacao": "Este é um sintoma muito característico e um forte indicador de COVID-19."
+    },
+    {
+        "nome": "ManchasNaPele",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "Apareceram manchas vermelhas na pele?",
+        "explicacao": "Manchas ou erupções cutâneas (exantema) são um sintoma comum na Dengue."
+    },
+    {
+        "nome": "Diagnostico",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sugestivo de Gripe",
+            "Sugestivo de Resfriado Comum",
+            "Sugestivo de Dengue",
+            "Sugestivo de COVID-19",
+            "Inconclusivo"
+        ],
+        "min_val": null,
+        "max_val": null,
+        "pergunta": "",
+        "explicacao": "Esta é a variável de objetivo, representando a hipótese diagnóstica do sistema com base nos sintomas."
+    }
+]

@@ -1,6 +1,9 @@
 // frontend/js/editor.js
 
 const API_URL = 'http://127.0.0.1:5000';
+let kbAtiva = null; // Compartilhar escolha de KB (idealmente sincronizar com index via armazenamento local)
+// Tenta recuperar KB ativa do localStorage se existir
+try { kbAtiva = localStorage.getItem('kbAtiva') || null; } catch(e) {}
 
 // --- Mapeamento de Elementos ---
 const formVariavel = document.getElementById('form-variavel');
@@ -33,7 +36,8 @@ let modoEdicaoVariavel = { ativo: false, nomeOriginal: null };
 async function apagarVariavel(nome) {
     if (!confirm(`Tem certeza que deseja apagar a variável "${nome}"?`)) return;
     try {
-        const response = await fetch(`${API_URL}/api/variaveis/${encodeURIComponent(nome)}`, { method: 'DELETE' });
+    if (!kbAtiva) { alert('Selecione uma KB na tela principal antes de editar.'); return; }
+    const response = await fetch(`${API_URL}/api/variaveis/${encodeURIComponent(nome)}?kb=${encodeURIComponent(kbAtiva)}`, { method: 'DELETE' });
         const data = await response.json();
         if (!response.ok) {
             alert(`Erro: ${data.erro}`);
@@ -48,7 +52,8 @@ async function apagarVariavel(nome) {
 async function apagarRegra(nome) {
     if (!confirm(`Tem certeza que deseja apagar a regra "${nome}"?`)) return;
     try {
-        const response = await fetch(`${API_URL}/api/regras/${encodeURIComponent(nome)}`, { method: 'DELETE' });
+    if (!kbAtiva) { alert('Selecione uma KB na tela principal antes de editar.'); return; }
+    const response = await fetch(`${API_URL}/api/regras/${encodeURIComponent(nome)}?kb=${encodeURIComponent(kbAtiva)}`, { method: 'DELETE' });
         if (response.ok) {
             cancelarEdicaoRegra();
             carregarRegras();
@@ -70,12 +75,11 @@ function renderizarVariaveis() {
     }
     variaveisDisponiveis.forEach(v => {
         const li = document.createElement('li');
-        li.className = 'lista-item';
         li.innerHTML = `
-            <span>${v.nome} (${v.tipo})</span>
+            <span>${v.nome} <small style="opacity:.6">(${v.tipo})</small></span>
             <div class="item-acoes">
-                <button class="btn-editar">Editar</button>
-                <button class="btn-apagar">Apagar</button>
+                <button class="btn-editar" title="Editar">Editar</button>
+                <button class="btn-apagar" title="Apagar">Apagar</button>
             </div>
         `;
         li.querySelector('.btn-editar').addEventListener('click', () => popularFormularioVariavel(v));
@@ -90,12 +94,14 @@ function renderizarRegras() {
         const seStr = r.condicoes_se.map(c => `${c.variavel} ${c.operador} ${c.valor}`).join(' E ');
         const entaoStr = r.conclusoes_entao.map(c => `${c.variavel} = ${c.valor}`).join(', ');
         const li = document.createElement('li');
-        li.className = 'lista-item';
         li.innerHTML = `
-            <div><strong>${r.nome}:</strong> SE (${seStr}) ENTÃO (${entaoStr})</div>
+            <div style="flex:1;">
+                <strong>${r.nome}</strong><br>
+                <span style="font-size:.7rem;opacity:.75">SE (${seStr})<br>ENTÃO (${entaoStr})</span>
+            </div>
             <div class="item-acoes">
-                <button class="btn-editar">Editar</button>
-                <button class="btn-apagar">Apagar</button>
+                <button class="btn-editar" title="Editar">Editar</button>
+                <button class="btn-apagar" title="Apagar">Apagar</button>
             </div>
         `;
         li.querySelector('.btn-editar').addEventListener('click', () => popularFormularioRegra(r));
@@ -106,7 +112,8 @@ function renderizarRegras() {
 
 async function carregarVariaveis() {
     try {
-        const response = await fetch(`${API_URL}/api/variaveis`);
+    if (!kbAtiva) { listaVariaveis.innerHTML = '<li>Selecione uma KB primeiro.</li>'; return; }
+    const response = await fetch(`${API_URL}/api/variaveis?kb=${encodeURIComponent(kbAtiva)}`);
         variaveisDisponiveis = await response.json();
         renderizarVariaveis();
     } catch (error) {
@@ -117,7 +124,8 @@ async function carregarVariaveis() {
 
 async function carregarRegras() {
     try {
-        const response = await fetch(`${API_URL}/api/regras`);
+    if (!kbAtiva) { listaRegras.innerHTML = '<li>Selecione uma KB primeiro.</li>'; return; }
+    const response = await fetch(`${API_URL}/api/regras?kb=${encodeURIComponent(kbAtiva)}`);
         regrasDisponiveis = await response.json();
         renderizarRegras();
     } catch (error) {
@@ -249,10 +257,11 @@ formVariavel.addEventListener('submit', async (e) => {
         if (min) payload.min_val = parseFloat(min);
         if (max) payload.max_val = parseFloat(max);
     }
-    let url = `${API_URL}/api/variaveis`;
+    if (!kbAtiva) { alert('Selecione uma KB antes de salvar.'); return; }
+    let url = `${API_URL}/api/variaveis?kb=${encodeURIComponent(kbAtiva)}`;
     let method = 'POST';
     if (modoEdicaoVariavel.ativo) {
-        url = `${API_URL}/api/variaveis/${encodeURIComponent(modoEdicaoVariavel.nomeOriginal)}`;
+    url = `${API_URL}/api/variaveis/${encodeURIComponent(modoEdicaoVariavel.nomeOriginal)}?kb=${encodeURIComponent(kbAtiva)}`;
         method = 'PUT';
     }
     try {
@@ -293,10 +302,11 @@ formRegra.addEventListener('submit', async (e) => {
         alert('Uma regra precisa de condições e conclusões.');
         return;
     }
-    let url = `${API_URL}/api/regras`;
+    if (!kbAtiva) { alert('Selecione uma KB antes de salvar.'); return; }
+    let url = `${API_URL}/api/regras?kb=${encodeURIComponent(kbAtiva)}`;
     let method = 'POST';
     if (modoEdicaoRegra.ativo) {
-        url = `${API_URL}/api/regras/${encodeURIComponent(modoEdicaoRegra.nomeOriginal)}`;
+    url = `${API_URL}/api/regras/${encodeURIComponent(modoEdicaoRegra.nomeOriginal)}?kb=${encodeURIComponent(kbAtiva)}`;
         method = 'PUT';
     }
     try {
@@ -324,4 +334,15 @@ selectVarTipo.addEventListener('change', () => {
 });
 
 // --- INICIALIZAÇÃO ---
-document.addEventListener('DOMContentLoaded', carregarTudo);
+document.addEventListener('DOMContentLoaded', () => {
+    // Atualiza kbAtiva a partir do localStorage sempre que abrir o editor
+    try { kbAtiva = localStorage.getItem('kbAtiva') || kbAtiva; } catch(e) {}
+    // Status bar elementos (se existirem)
+    const statusKb = document.getElementById('status-kb');
+    const statusModo = document.getElementById('status-modo');
+    const statusObjetivo = document.getElementById('status-objetivo');
+    if (statusKb) statusKb.textContent = kbAtiva ? `KB: ${kbAtiva}` : 'KB: (nenhuma)';
+    if (statusModo) statusModo.textContent = 'Modo: Editor';
+    if (statusObjetivo) statusObjetivo.textContent = 'Objetivo: -';
+    carregarTudo();
+});

@@ -1,0 +1,152 @@
+[
+    {
+        "nome": "Regra_HomemDeFerro",
+        "condicoes_se": [
+            {
+                "variavel": "eReal",
+                "operador": "==",
+                "valor": "Nao"
+            },
+            {
+                "variavel": "eHomem",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "UsaTecnologiaAvancada",
+                "operador": "==",
+                "valor": "Sim"
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Personagem",
+                "operador": "==",
+                "valor": "Homem de Ferro",
+                "fc": 1.0
+            }
+        ]
+    },
+    {
+        "nome": "Regra_MulherMaravilha",
+        "condicoes_se": [
+            {
+                "variavel": "eReal",
+                "operador": "==",
+                "valor": "Nao"
+            },
+            {
+                "variavel": "eHomem",
+                "operador": "==",
+                "valor": "Nao"
+            },
+            {
+                "variavel": "TemSuperPoderes",
+                "operador": "==",
+                "valor": "Sim"
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Personagem",
+                "operador": "==",
+                "valor": "Mulher-Maravilha",
+                "fc": 1.0
+            }
+        ]
+    },
+    {
+        "nome": "Regra_ElonMusk",
+        "condicoes_se": [
+            {
+                "variavel": "eReal",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "eHomem",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "UsaTecnologiaAvancada",
+                "operador": "==",
+                "valor": "Sim"
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Personagem",
+                "operador": "==",
+                "valor": "Elon Musk",
+                "fc": 1.0
+            }
+        ]
+    },
+    {
+        "nome": "Regra_AdaLovelace",
+        "condicoes_se": [
+            {
+                "variavel": "eReal",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "eHomem",
+                "operador": "==",
+                "valor": "Nao"
+            },
+            {
+                "variavel": "ViveuNoPassado",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "eEuropeu",
+                "operador": "==",
+                "valor": "Sim"
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Personagem",
+                "operador": "==",
+                "valor": "Ada Lovelace",
+                "fc": 1.0
+            }
+        ]
+    },
+    {
+        "nome": "Regra_Napoleao",
+        "condicoes_se": [
+            {
+                "variavel": "eReal",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "eHomem",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "ViveuNoPassado",
+                "operador": "==",
+                "valor": "Sim"
+            },
+            {
+                "variavel": "eEuropeu",
+                "operador": "==",
+                "valor": "Sim"
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Personagem",
+                "operador": "==",
+                "valor": "Napoleão Bonaparte",
+                "fc": 1.0
+            }
+        ]
+    }
+]

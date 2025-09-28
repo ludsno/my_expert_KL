@@ -50,12 +50,36 @@ function perguntarProximaForward() {
         }
     }
     areaInputUsuario.appendChild(inputElement);
+    let avisoRange = null;
+    let minVal = null, maxVal = null;
+    if (detalhe.tipo === 'numerica') {
+        minVal = (detalhe.min_val !== null && detalhe.min_val !== undefined) ? Number(detalhe.min_val) : null;
+        maxVal = (detalhe.max_val !== null && detalhe.max_val !== undefined) ? Number(detalhe.max_val) : null;
+        avisoRange = document.createElement('div');
+        avisoRange.className = 'msg-range';
+        let baseMsgRange = '';
+        if (minVal !== null || maxVal !== null) {
+            const partes = [];
+            if (minVal !== null) partes.push(`mínimo ${minVal}`);
+            if (maxVal !== null) partes.push(`máximo ${maxVal}`);
+            baseMsgRange = `Informe um valor ${partes.join(' e ')}`;
+            avisoRange.textContent = baseMsgRange;
+        }
+        areaInputUsuario.appendChild(avisoRange);
+    }
     const btnEnviar = document.createElement('button');
     btnEnviar.textContent = 'Enviar';
     btnEnviar.onclick = () => {
         const valor = inputElement.value;
         // Permite pular variável (deixar em branco)
         if (valor.trim() !== '') {
+            if (detalhe.tipo === 'numerica') {
+                const num = Number(valor);
+                if ((minVal !== null && num < minVal) || (maxVal !== null && num > maxVal)) {
+                    alert('Valor fora do intervalo permitido.');
+                    return;
+                }
+            }
             adicionarMensagem(`Você: ${valor}`, 'usuario');
             forwardChatFatos[varName] = valor.trim();
         } else {
@@ -78,13 +102,37 @@ function perguntarProximaForward() {
         alert(detalhe.explicacao);
     };
     areaInputUsuario.appendChild(btnExplicacao);
-
+    // Enter para enviar
+    inputElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            btnEnviar.click();
+        }
+    });
+    if (detalhe.tipo === 'numerica') {
+        inputElement.addEventListener('input', () => {
+            const v = inputElement.value.trim();
+            if (v === '') { btnEnviar.disabled = false; avisoRange?.classList.remove('erro'); return; }
+            const num = Number(v);
+            let invalido = false;
+            if (minVal !== null && num < minVal) invalido = true;
+            if (maxVal !== null && num > maxVal) invalido = true;
+            if (invalido) {
+                btnEnviar.disabled = true;
+                if (avisoRange) { avisoRange.textContent = `Fora do intervalo (${minVal !== null ? 'mín ' + minVal : ''}${(minVal!==null&&maxVal!==null)?' / ':''}${maxVal !== null ? 'máx ' + maxVal : ''})`; avisoRange.classList.add('erro'); }
+            } else {
+                btnEnviar.disabled = false;
+                if (avisoRange) { avisoRange.textContent = baseMsgRange; avisoRange.classList.remove('erro'); }
+            }
+        });
+    }
     inputElement.focus();
 }
 
 async function consultaForward(fatos) {
     try {
-        const response = await fetch(`${API_URL}/api/consulta/forward`, {
+        if (!kbAtiva) { alert('Selecione uma KB antes de consultar.'); return; }
+        const response = await fetch(`${API_URL}/api/consulta/forward?kb=${encodeURIComponent(kbAtiva)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fatos })
@@ -190,7 +238,14 @@ btnCancelarForward.addEventListener('click', function() {
 // frontend/js/main.js
 
 // --- Configurações e Variáveis Globais ---
-const API_URL = 'http://127.0.0.1:5000';
+// API_URL deve vir de common.js. A linha antiga usava "const API_URL = typeof API_URL..." que gerava
+// ReferenceError (TDZ) em alguns navegadores por causa do uso de const antes da declaração.
+// Aqui garantimos um fallback seguro sem redeclarar se já existir.
+if (typeof window !== 'undefined' && typeof window.API_URL === 'undefined') {
+    window.API_URL = 'http://127.0.0.1:5000';
+}
+// Obtém KB ativa se função existir (common.js carregado antes)
+let kbAtiva = (typeof getKbAtiva === 'function') ? getKbAtiva() : null;
 
 // Mapeamento dos elementos do HTML
 const secaoInicio = document.getElementById('secao-inicio');
@@ -200,6 +255,10 @@ const secaoResultado = document.getElementById('secao-resultado');
 const selectObjetivo = document.getElementById('select-objetivo');
 const btnIniciar = document.getElementById('btn-iniciar');
 const btnNovaConsulta = document.getElementById('btn-nova-consulta');
+// Status bar elementos (podem não existir em versões antigas)
+const statusKb = document.getElementById('status-kb');
+const statusModo = document.getElementById('status-modo');
+const statusObjetivo = document.getElementById('status-objetivo');
 
 const dialogoBox = document.getElementById('dialogo-box');
 const areaInputUsuario = document.getElementById('area-input-usuario');
@@ -215,11 +274,26 @@ let estadoConsulta = {
 };
 let todasAsVariaveis = {}; // Cache para guardar detalhes das variáveis
 
+// Desabilita o botão iniciar até que condições sejam satisfeitas
+btnIniciar.disabled = true;
+
+function atualizarEstadoBotaoIniciar() {
+    // Habilita apenas se houver KB ativa e um objetivo selecionado (não vazio)
+    const objetivoVal = selectObjetivo.value && selectObjetivo.value.trim();
+    btnIniciar.disabled = !(kbAtiva && objetivoVal);
+}
+
 // --- Funções de Comunicação com a API ---
 
 async function buscarVariaveis() {
+    if (!kbAtiva) {
+        selectObjetivo.innerHTML = '<option>Selecione uma KB primeiro</option>';
+        selectObjetivo.disabled = true;
+        atualizarEstadoBotaoIniciar();
+        return;
+    }
     try {
-        const response = await fetch(`${API_URL}/api/variaveis`);
+        const response = await fetch(`${API_URL}/api/variaveis?kb=${encodeURIComponent(kbAtiva)}`);
         const variaveisArray = await response.json();
         
         // Limpa e preenche o cache de variáveis
@@ -237,15 +311,19 @@ async function buscarVariaveis() {
             selectObjetivo.appendChild(option);
         });
         selectObjetivo.disabled = false;
+        atualizarEstadoBotaoIniciar();
+        if (statusObjetivo) statusObjetivo.textContent = 'Objetivo: -';
     } catch (error) {
         console.error("Erro ao carregar variáveis:", error);
         selectObjetivo.innerHTML = '<option>Erro ao carregar</option>';
+        atualizarEstadoBotaoIniciar();
     }
 }
 
 async function iniciarConsulta(objetivo) {
+    if (!kbAtiva) { alert('Selecione uma KB antes.'); return; }
     try {
-        const response = await fetch(`${API_URL}/api/consulta/iniciar`, {
+        const response = await fetch(`${API_URL}/api/consulta/iniciar?kb=${encodeURIComponent(kbAtiva)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ objetivo })
@@ -260,7 +338,7 @@ async function iniciarConsulta(objetivo) {
 
 async function enviarResposta(valor) {
     try {
-        const response = await fetch(`${API_URL}/api/consulta/responder`, {
+        const response = await fetch(`${API_URL}/api/consulta/responder?kb=${encodeURIComponent(kbAtiva)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ variavel: estadoConsulta.variavelAtual, valor })
@@ -323,6 +401,25 @@ function renderizarInputUsuario() {
     }
     inputElement.id = 'input-resposta';
     areaInputUsuario.appendChild(inputElement);
+    let avisoRange = null;
+    let minVal = null, maxVal = null;
+    if (detalheVariavel && detalheVariavel.tipo === 'numerica') {
+        minVal = (detalheVariavel.min_val !== null && detalheVariavel.min_val !== undefined) ? Number(detalheVariavel.min_val) : null;
+        maxVal = (detalheVariavel.max_val !== null && detalheVariavel.max_val !== undefined) ? Number(detalheVariavel.max_val) : null;
+        if (minVal !== null) inputElement.min = minVal;
+        if (maxVal !== null) inputElement.max = maxVal;
+        avisoRange = document.createElement('div');
+        avisoRange.className = 'msg-range';
+        let baseMsgRange = '';
+        if (minVal !== null || maxVal !== null) {
+            const partes = [];
+            if (minVal !== null) partes.push(`mínimo ${minVal}`);
+            if (maxVal !== null) partes.push(`máximo ${maxVal}`);
+            baseMsgRange = `Informe um valor ${partes.join(' e ')}`;
+            avisoRange.textContent = baseMsgRange;
+        }
+        areaInputUsuario.appendChild(avisoRange);
+    }
 
     // Cria o botão de enviar
     const btnEnviar = document.createElement('button');
@@ -332,6 +429,13 @@ function renderizarInputUsuario() {
         if (valor.trim() === '') {
             alert('Por favor, informe um valor.');
             return;
+        }
+        if (detalheVariavel && detalheVariavel.tipo === 'numerica') {
+            const num = Number(valor);
+            if ((minVal !== null && num < minVal) || (maxVal !== null && num > maxVal)) {
+                alert('Valor fora do intervalo permitido.');
+                return;
+            }
         }
         adicionarMensagem(`Você: ${valor}`, 'usuario');
         enviarResposta(valor);
@@ -352,7 +456,32 @@ function renderizarInputUsuario() {
         alert(estadoConsulta.explicacaoAtual);
     };
     areaInputUsuario.appendChild(btnExplicacao);
-
+    // Enviar com Enter (sem Shift) para melhorar fluxo
+    inputElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            btnEnviar.click();
+        }
+    });
+    if (detalheVariavel && detalheVariavel.tipo === 'numerica') {
+        inputElement.addEventListener('input', () => {
+            const v = inputElement.value.trim();
+            if (v === '') { btnEnviar.disabled = true; avisoRange?.classList.remove('erro'); return; }
+            const num = Number(v);
+            let invalido = false;
+            if (minVal !== null && num < minVal) invalido = true;
+            if (maxVal !== null && num > maxVal) invalido = true;
+            if (invalido) {
+                btnEnviar.disabled = true;
+                if (avisoRange) { avisoRange.textContent = `Fora do intervalo (${minVal !== null ? 'mín ' + minVal : ''}${(minVal!==null&&maxVal!==null)?' / ':''}${maxVal !== null ? 'máx ' + maxVal : ''})`; avisoRange.classList.add('erro'); }
+            } else {
+                btnEnviar.disabled = false;
+                if (avisoRange) { avisoRange.textContent = baseMsgRange; avisoRange.classList.remove('erro'); }
+            }
+        });
+        // força checagem inicial
+        inputElement.dispatchEvent(new Event('input'));
+    }
     inputElement.focus();
 }
 
@@ -388,11 +517,18 @@ function resetarInterface() {
     areaInputUsuario.innerHTML = '';
     estadoConsulta = { objetivo: null, variavelAtual: null, contextoPorque: null };
     selectObjetivo.selectedIndex = 0;
+    if (statusModo) statusModo.textContent = 'Modo: -';
+    if (statusObjetivo) statusObjetivo.textContent = 'Objetivo: -';
 }
 
 // --- Inicialização e Event Listeners ---
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Se não houver KB ativa, redirecionar para página de seleção
+    if (!kbAtiva) { window.location.href = 'kbs.html'; return; }
+    if (typeof atualizarStatusBar === 'function') {
+        atualizarStatusBar({ kb: kbAtiva });
+    }
     document.getElementById('btn-voltar-consulta').addEventListener('click', () => {
         secaoConsulta.classList.add('hidden');
         secaoResultado.classList.add('hidden');
@@ -410,31 +546,17 @@ document.addEventListener('DOMContentLoaded', () => {
         dialogoBox.innerHTML = '';
         areaInputUsuario.innerHTML = '';
     });
-    buscarVariaveis();
+    // buscarVariaveis será chamada após selecionar KB
 
     btnIniciar.addEventListener('click', () => {
-        // Modal simples para escolha do tipo de consulta
+        // Modal reutilizando classes
         const modal = document.createElement('div');
-        modal.style.position = 'fixed';
-        modal.style.top = '0';
-        modal.style.left = '0';
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.3)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = '9999';
-
+        modal.className = 'modal-overlay';
         const box = document.createElement('div');
-        box.style.background = '#fff';
-        box.style.padding = '2em';
-        box.style.borderRadius = '8px';
-        box.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-        box.style.display = 'flex';
-        box.style.flexDirection = 'column';
-        box.style.gap = '1em';
+        box.className = 'modal-box';
         box.innerHTML = '<h3>Escolha o tipo de consulta</h3>';
+        const actions = document.createElement('div');
+        actions.className = 'modal-actions';
 
         const btnBackward = document.createElement('button');
         btnBackward.textContent = 'Backward Chaining';
@@ -451,6 +573,8 @@ document.addEventListener('DOMContentLoaded', () => {
             secaoConsulta.classList.remove('hidden');
             adicionarMensagem(`Sistema: Iniciando consulta para determinar "${objetivoSelecionado}".`, 'sistema');
             iniciarConsulta(objetivoSelecionado);
+            if (statusModo) statusModo.textContent = 'Modo: Backward';
+            if (statusObjetivo) statusObjetivo.textContent = `Objetivo: ${objetivoSelecionado}`;
         };
 
         const btnForward = document.createElement('button');
@@ -459,13 +583,23 @@ document.addEventListener('DOMContentLoaded', () => {
         btnForward.onclick = () => {
             document.body.removeChild(modal);
             iniciarForwardChat();
+            if (statusModo) statusModo.textContent = 'Modo: Forward';
+            if (statusObjetivo) statusObjetivo.textContent = 'Objetivo: -';
         };
 
-        box.appendChild(btnBackward);
-        box.appendChild(btnForward);
+        actions.appendChild(btnBackward);
+        actions.appendChild(btnForward);
+        box.appendChild(actions);
         modal.appendChild(box);
         document.body.appendChild(modal);
     });
 
     btnNovaConsulta.addEventListener('click', resetarInterface);
+    selectObjetivo.addEventListener('change', atualizarEstadoBotaoIniciar);
+    selectObjetivo.addEventListener('change', () => { if (statusObjetivo) { const v = selectObjetivo.value; statusObjetivo.textContent = v ? `Objetivo: ${v}` : 'Objetivo: -'; }});
+    // Carrega variáveis da KB ativa (se houver) após garantir que common.js forneceu getKbAtiva
+    if (kbAtiva) {
+        buscarVariaveis();
+    }
+    atualizarEstadoBotaoIniciar();
 });

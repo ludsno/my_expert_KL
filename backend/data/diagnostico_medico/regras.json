@@ -1,0 +1,158 @@
+[
+    {
+        "nome": "Regra_COVID_Classico",
+        "condicoes_se": [
+            {
+                "variavel": "PerdaOlfatoPaladar",
+                "operador": "==",
+                "valor": "Sim",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de COVID-19",
+                "fc": 0.95
+            }
+        ]
+    },
+    {
+        "nome": "Regra_Dengue_Classica",
+        "condicoes_se": [
+            {
+                "variavel": "Febre",
+                "operador": "==",
+                "valor": "Alta (>38.5°C)",
+                "fc": 1.0
+            },
+            {
+                "variavel": "DoresNoCorpo",
+                "operador": "==",
+                "valor": "Intensa",
+                "fc": 1.0
+            },
+            {
+                "variavel": "DorDeCabeca",
+                "operador": "==",
+                "valor": "Intensa (atrás dos olhos)",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de Dengue",
+                "fc": 0.9
+            }
+        ]
+    },
+    {
+        "nome": "Regra_Gripe_Forte",
+        "condicoes_se": [
+            {
+                "variavel": "Febre",
+                "operador": "==",
+                "valor": "Alta (>38.5°C)",
+                "fc": 1.0
+            },
+            {
+                "variavel": "DoresNoCorpo",
+                "operador": "==",
+                "valor": "Intensa",
+                "fc": 1.0
+            },
+            {
+                "variavel": "SintomasRespiratorios",
+                "operador": "==",
+                "valor": "Tosse Seca",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de Gripe",
+                "fc": 0.85
+            }
+        ]
+    },
+    {
+        "nome": "Regra_Resfriado_Comum",
+        "condicoes_se": [
+            {
+                "variavel": "SintomasRespiratorios",
+                "operador": "==",
+                "valor": "Coriza e Espirros",
+                "fc": 1.0
+            },
+            {
+                "variavel": "Febre",
+                "operador": "!=",
+                "valor": "Alta (>38.5°C)",
+                "fc": 1.0
+            },
+            {
+                "variavel": "DoresNoCorpo",
+                "operador": "!=",
+                "valor": "Intensa",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de Resfriado Comum",
+                "fc": 0.9
+            }
+        ]
+    },
+    {
+        "nome": "Regra_Dengue_Manchas",
+        "condicoes_se": [
+            {
+                "variavel": "ManchasNaPele",
+                "operador": "==",
+                "valor": "Sim",
+                "fc": 1.0
+            },
+            {
+                "variavel": "Febre",
+                "operador": "!=",
+                "valor": "Nenhuma",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de Dengue",
+                "fc": 0.7
+            }
+        ]
+    },
+    {
+        "nome": "Regra_COVID_FaltaDeAr",
+        "condicoes_se": [
+            {
+                "variavel": "SintomasRespiratorios",
+                "operador": "==",
+                "valor": "Falta de Ar",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Diagnostico",
+                "operador": "==",
+                "valor": "Sugestivo de COVID-19",
+                "fc": 0.8
+            }
+        ]
+    }
+]

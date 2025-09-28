@@ -1,0 +1,184 @@
+[
+    {
+        "nome": "Jovem com pouca experiência",
+        "condicoes_se": [
+            {
+                "variavel": "Age",
+                "operador": "<",
+                "valor": "30",
+                "fc": 1.0
+            },
+            {
+                "variavel": "YearsAtCompany",
+                "operador": "<",
+                "valor": "3",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.7
+            }
+        ]
+    },
+    {
+        "nome": "Baixa remuneração",
+        "condicoes_se": [
+            {
+                "variavel": "MonthlyIncome",
+                "operador": "<",
+                "valor": "5000",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.7
+            }
+        ]
+    },
+    {
+        "nome": "Horas extra frequentes",
+        "condicoes_se": [
+            {
+                "variavel": "OverTime",
+                "operador": ">",
+                "valor": "15",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.6
+            }
+        ]
+    },
+    {
+        "nome": "Distância longa de casa",
+        "condicoes_se": [
+            {
+                "variavel": "DistanceFromHome",
+                "operador": ">",
+                "valor": "15",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.6
+            }
+        ]
+    },
+    {
+        "nome": "Baixa satisfação no trabalho",
+        "condicoes_se": [
+            {
+                "variavel": "JobSatisfaction",
+                "operador": "<=",
+                "valor": "2",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.8
+            }
+        ]
+    },
+    {
+        "nome": "Viagens frequentes",
+        "condicoes_se": [
+            {
+                "variavel": "BusinessTravel",
+                "operador": "==",
+                "valor": "Travel_Frequently",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "Yes",
+                "fc": 0.5
+            }
+        ]
+    },
+    {
+        "nome": "Funcionário estável e experiente",
+        "condicoes_se": [
+            {
+                "variavel": "Age",
+                "operador": ">",
+                "valor": "35",
+                "fc": 1.0
+            },
+            {
+                "variavel": "YearsAtCompany",
+                "operador": ">",
+                "valor": "5",
+                "fc": 1.0
+            },
+            {
+                "variavel": "MonthlyIncome",
+                "operador": ">",
+                "valor": "6000",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "No",
+                "fc": 0.8
+            }
+        ]
+    },
+    {
+        "nome": "Boa satisfação e envolvimento",
+        "condicoes_se": [
+            {
+                "variavel": "JobSatisfaction",
+                "operador": ">=",
+                "valor": "3",
+                "fc": 1.0
+            },
+            {
+                "variavel": "JobInvolvement",
+                "operador": ">=",
+                "valor": "3",
+                "fc": 1.0
+            },
+            {
+                "variavel": "WorkLifeBalance",
+                "operador": ">=",
+                "valor": "3",
+                "fc": 1.0
+            }
+        ],
+        "conclusoes_entao": [
+            {
+                "variavel": "Attrition",
+                "operador": "==",
+                "valor": "No",
+                "fc": 0.7
+            }
+        ]
+    }
+]

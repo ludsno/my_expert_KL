@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selecionar Base de Conhecimento</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="menubar">
+    <div class="menubar-app-title">Sistema Especialista</div>
+    <nav class="menubar-links">
+      <a href="kbs.html" class="menu-link ativo">Bases</a>
+      <a href="consulta.html" class="menu-link">Consulta</a>
+      <a href="editor.html" class="menu-link">Editor</a>
+    </nav>
+  </div>
+  <main id="app-shell">
+    <h2 class="subtitulo">Bases de Conhecimento</h2>
+    <ul id="lista-kbs"></ul>
+    <div class="form-group">
+      <input type="text" id="input-nova-kb" placeholder="Nome da nova KB" />
+      <button id="btn-criar-kb" class="btn-espacado">Criar KB</button>
+    </div>
+    <p id="kb-info" style="font-size:.8rem;opacity:.8"></p>
+  </main>
+  <div id="status-bar" class="status-bar">
+    <span id="status-kb">KB: (nenhuma)</span>
+    <span id="status-modo">Modo: Bases</span>
+    <span id="status-objetivo">Objetivo: -</span>
+  </div>
+  <script src="js/common.js"></script>
+  <script src="js/kbs.js"></script>
+</body>
+</html>

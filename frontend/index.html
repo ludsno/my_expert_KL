@@ -1,56 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema Especialista</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css" />
 </head>
-
 <body>
-    <header>
-        <h1 class="titulo-principal">Sistema Especialista</h1>
-        <a href="editor.html" class="nav-link nav-link-editor">Editor da Base de Conhecimento</a>
-    </header>
-
-    <main>
-        <section id="secao-inicio">
-            <h2 class="subtitulo">Nova Consulta</h2>
-            <div class="form-group">
-                <label for="select-objetivo" class="label-objetivo">Qual o seu objetivo?</label>
-                <select id="select-objetivo" disabled>
-                    <option>Carregando variáveis...</option>
-                </select>
-            </div>
-            <button id="btn-iniciar" class="btn-espacado">Iniciar Consulta</button>
-        </section>
-        <section id="secao-forward" class="hidden">
-            <h2 class="subtitulo">Forward Chaining</h2>
-            <form id="form-forward">
-                <div id="inputs-forward"></div>
-                <button type="submit" class="btn-espacado">Executar Forward Chaining</button>
-                <button type="button" id="btn-cancelar-forward" class="btn-espacado">Cancelar</button>
-            </form>
-        </section>
-
-        <section id="secao-consulta" class="hidden">
-            <button id="btn-voltar-consulta" class="btn-espacado" style="margin-bottom:1em;">Voltar</button>
-            <div id="dialogo-box"></div>
-            <div id="area-input-usuario"></div>
-        </section>
-
-        <section id="secao-resultado" class="hidden">
-            <h2 class="subtitulo">Consulta Finalizada</h2>
-            <div id="resultado-final"></div>
-            <div class="explicacao-titulo">Como chegamos a esta conclusão?</div>
-            <ul id="explicacao-como"></ul>
-            <button id="btn-voltar-resultado" class="btn-espacado">Voltar</button>
-            <button id="btn-nova-consulta" class="btn-espacado">Nova Consulta</button>
-        </section>
+    <div class="menubar">
+        <div class="menubar-app-title">Sistema Especialista</div>
+        <nav class="menubar-links">
+            <a href="kbs.html" class="menu-link">Bases</a>
+            <a href="consulta.html" class="menu-link">Consulta</a>
+            <a href="editor.html" class="menu-link">Editor</a>
+        </nav>
+    </div>
+    <main id="app-shell">
+        <h1 class="titulo-principal">Bem-vindo</h1>
+        <p style="max-width:640px;font-size:0.95rem;">Escolha no menu acima o que deseja fazer. Comece em <strong>Bases</strong> para selecionar ou criar uma base de conhecimento, depois vá em <strong>Consulta</strong> para realizar inferências, ou abra o <strong>Editor</strong> para gerenciar variáveis e regras.</p>
     </main>
-
-    <script src="js/main.js"></script>
+    <div id="status-bar" class="status-bar">
+        <span id="status-kb">KB: (nenhuma)</span>
+        <span id="status-modo">Modo: Início</span>
+        <span id="status-objetivo">Objetivo: -</span>
+    </div>
+    <script src="js/common.js"></script>
+    <script>
+        // Atualiza status bar caso já haja uma KB ativa
+        if (typeof getKbAtiva === 'function') {
+            const k = getKbAtiva();
+            if (k) atualizarStatusBar({ kb: k, modo: 'Início', objetivo: '-' });
+        }
+    </script>
 </body>
-
 </html>

@@ -1,0 +1,75 @@
+[
+    {
+        "nome": "eReal",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem existe ou existiu no mundo real?",
+        "explicacao": "Define se o personagem é uma pessoa real ou uma criação de ficção (livros, filmes, etc.)."
+    },
+    {
+        "nome": "eHomem",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem é um homem?",
+        "explicacao": ""
+    },
+    {
+        "nome": "UsaTecnologiaAvancada",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem é conhecido por usar tecnologia muito avançada?",
+        "explicacao": "Refere-se a tecnologias futuristas, como armaduras robóticas, ou invenções que mudaram o mundo."
+    },
+    {
+        "nome": "TemSuperPoderes",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem tem super-poderes (voar, super-força, etc.)?",
+        "explicacao": "Poderes que vão além da capacidade humana normal."
+    },
+    {
+        "nome": "ViveuNoPassado",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem viveu principalmente no passado (antes do século 20)?",
+        "explicacao": ""
+    },
+    {
+        "nome": "eEuropeu",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Sim",
+            "Nao"
+        ],
+        "pergunta": "O seu personagem é europeu?",
+        "explicacao": ""
+    },
+    {
+        "nome": "Personagem",
+        "tipo": "univalorada",
+        "valores_possiveis": [
+            "Homem de Ferro",
+            "Mulher-Maravilha",
+            "Elon Musk",
+            "Ada Lovelace",
+            "Napoleão Bonaparte"
+        ],
+        "pergunta": "",
+        "explicacao": "O personagem que o sistema está tentando adivinhar."
+    }
+]
