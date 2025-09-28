@@ -9,12 +9,16 @@ class Variavel:
         valores_possiveis=None,
         min_val=None,
         max_val=None,
+        pergunta="",
+        explicacao="",
     ):
         self.nome = nome
         self.tipo = tipo  # univalorada, multivalorada, numerica
         self.valores_possiveis = valores_possiveis or []
         self.min_val = min_val
         self.max_val = max_val
+        self.pergunta = pergunta
+        self.explicacao = explicacao
 
     def to_dict(self):
         return {
@@ -23,6 +27,8 @@ class Variavel:
             "valores_possiveis": self.valores_possiveis,
             "min_val": self.min_val,
             "max_val": self.max_val,
+            "pergunta": self.pergunta,
+            "explicacao": self.explicacao,
         }
 
 

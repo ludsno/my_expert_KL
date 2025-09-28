@@ -25,8 +25,17 @@
             </div>
             <button id="btn-iniciar" class="btn-espacado">Iniciar Consulta</button>
         </section>
+        <section id="secao-forward" class="hidden">
+            <h2 class="subtitulo">Forward Chaining</h2>
+            <form id="form-forward">
+                <div id="inputs-forward"></div>
+                <button type="submit" class="btn-espacado">Executar Forward Chaining</button>
+                <button type="button" id="btn-cancelar-forward" class="btn-espacado">Cancelar</button>
+            </form>
+        </section>
 
         <section id="secao-consulta" class="hidden">
+            <button id="btn-voltar-consulta" class="btn-espacado" style="margin-bottom:1em;">Voltar</button>
             <div id="dialogo-box"></div>
             <div id="area-input-usuario"></div>
         </section>
@@ -36,6 +45,7 @@
             <div id="resultado-final"></div>
             <div class="explicacao-titulo">Como chegamos a esta conclusão?</div>
             <ul id="explicacao-como"></ul>
+            <button id="btn-voltar-resultado" class="btn-espacado">Voltar</button>
             <button id="btn-nova-consulta" class="btn-espacado">Nova Consulta</button>
         </section>
     </main>

@@ -1,12 +1,51 @@
+
 # backend/app/inference_engine.py
 
 from .models import BaseConhecimento, Condicao
 
+# --- Motor de Encadeamento para Frente ---
+class MotorForwardChaining:
+    def __init__(self, bc: BaseConhecimento):
+        self.bc = bc
+        self.fatos_sessao = dict(bc.fatos)  # Fatos conhecidos
+        self.trilha_explicacao = []
+
+    def adicionar_fato(self, variavel, valor):
+        self.fatos_sessao[variavel] = valor
+
+    def encadear(self):
+        alterado = True
+        while alterado:
+            alterado = False
+            for regra in self.bc.regras:
+                # Verifica se todas as condições SE são satisfeitas
+                todas_satisfeitas = True
+                for cond in regra.condicoes_se:
+                    valor = self.fatos_sessao.get(cond.variavel)
+                    if valor is None or not avaliar_condicao_com_valor(cond, valor):
+                        todas_satisfeitas = False
+                        break
+                if todas_satisfeitas:
+                    # Aplica conclusões ENTÃO
+                    for conc in regra.conclusoes_entao:
+                        valor_existente = self.fatos_sessao.get(conc.variavel)
+                        if valor_existente != conc.valor:
+                            self.fatos_sessao[conc.variavel] = conc.valor
+                            self.trilha_explicacao.append(regra)
+                            alterado = True
+
+        return {
+            "fatos": self.fatos_sessao,
+            "explicacao_como": [r.nome for r in self.trilha_explicacao],
+        }
+
 
 # --- Exceção Customizada ---
 class AskUserException(Exception):
-    def __init__(self, variavel, regra_contexto=None):
+    def __init__(self, variavel, pergunta="", explicacao="", regra_contexto=None):
         self.variavel = variavel
+        self.pergunta = pergunta
+        self.explicacao = explicacao
         self.regra_contexto = regra_contexto
 
 
@@ -71,10 +110,13 @@ class MotorBackwardChaining:
                 "explicacao_como": [regra.nome for regra in self.trilha_explicacao],
             }
         except AskUserException as e:
+            justificativa_regra = e.regra_contexto.nome if e.regra_contexto else ""
             return {
                 "tipo": "pergunta",
                 "variavel": e.variavel,
-                "contexto_porque": e.regra_contexto.nome if e.regra_contexto else None,
+                "pergunta_texto": e.pergunta,
+                "explicacao_texto": e.explicacao,
+                "contexto_regra": justificativa_regra,
             }
 
     def _buscar_valor_para(self, variavel_alvo: str, pilha_recursao=None):
@@ -135,7 +177,24 @@ class MotorBackwardChaining:
         if variavel_alvo in self.fatos_sessao:
             return self.fatos_sessao[variavel_alvo]
 
-        raise AskUserException(variavel_alvo)
+        variavel_obj = self.bc.variaveis.get(variavel_alvo)
+        pergunta_texto = (
+            variavel_obj.pergunta if variavel_obj and variavel_obj.pergunta else f"Informe o valor para '{variavel_alvo}'."
+        )
+        explicacao_texto = variavel_obj.explicacao if variavel_obj else ""
+
+        regra_contexto = next(
+            (
+                r
+                for r in self.bc.regras
+                if any(c.variavel == variavel_alvo for c in r.condicoes_se)
+            ),
+            None,
+        )
+
+        raise AskUserException(
+            variavel_alvo, pergunta_texto, explicacao_texto, regra_contexto
+        )
 
 
 # fim de inference_engine.py

@@ -27,18 +27,16 @@ const campoRangeNumerico = document.getElementById('campo-range-numerico');
 let variaveisDisponiveis = [];
 let regrasDisponiveis = [];
 let modoEdicaoRegra = { ativo: false, nomeOriginal: null };
-// NOVO: Estado de edição para variáveis
 let modoEdicaoVariavel = { ativo: false, nomeOriginal: null };
-
 
 // --- FUNÇÕES DE APAGAR ---
 async function apagarVariavel(nome) {
     if (!confirm(`Tem certeza que deseja apagar a variável "${nome}"?`)) return;
     try {
         const response = await fetch(`${API_URL}/api/variaveis/${encodeURIComponent(nome)}`, { method: 'DELETE' });
-        const data = await response.json().catch(() => ({}));
+        const data = await response.json();
         if (!response.ok) {
-            alert(`Erro: ${data.erro || 'Falha ao apagar variável.'}`);
+            alert(`Erro: ${data.erro}`);
         } else {
             carregarTudo();
         }
@@ -55,8 +53,8 @@ async function apagarRegra(nome) {
             cancelarEdicaoRegra();
             carregarRegras();
         } else {
-            const data = await response.json().catch(() => ({}));
-            alert(`Erro: ${data.erro || 'Falha ao apagar regra.'}`);
+            const data = await response.json();
+            alert(`Erro: ${data.erro}`);
         }
     } catch (error) {
         console.error('Erro ao apagar regra:', error);
@@ -64,7 +62,6 @@ async function apagarRegra(nome) {
 }
 
 // --- FUNÇÕES DE CARREGAMENTO E RENDERIZAÇÃO ---
-
 function renderizarVariaveis() {
     listaVariaveis.innerHTML = '';
     if (variaveisDisponiveis.length === 0) {
@@ -74,7 +71,6 @@ function renderizarVariaveis() {
     variaveisDisponiveis.forEach(v => {
         const li = document.createElement('li');
         li.className = 'lista-item';
-        // ALTERADO: Adicionado o botão "Editar"
         li.innerHTML = `
             <span>${v.nome} (${v.tipo})</span>
             <div class="item-acoes">
@@ -90,22 +86,13 @@ function renderizarVariaveis() {
 
 function renderizarRegras() {
     listaRegras.innerHTML = '';
-    if (regrasDisponiveis.length === 0) {
-        listaRegras.innerHTML = '<li>Nenhuma regra cadastrada.</li>';
-        return;
-    }
     regrasDisponiveis.forEach(r => {
         const seStr = r.condicoes_se.map(c => `${c.variavel} ${c.operador} ${c.valor}`).join(' E ');
-        const entaoStr = r.conclusoes_entao.map(c => {
-            const fcTxt = c.fc !== 1.0 ? ` (fc=${c.fc})` : '';
-            return `${c.variavel} = ${c.valor}${fcTxt}`;
-        }).join(', ');
+        const entaoStr = r.conclusoes_entao.map(c => `${c.variavel} = ${c.valor}`).join(', ');
         const li = document.createElement('li');
         li.className = 'lista-item';
         li.innerHTML = `
-            <div>
-                <strong>${r.nome}:</strong> SE (${seStr}) ENTÃO (${entaoStr})
-            </div>
+            <div><strong>${r.nome}:</strong> SE (${seStr}) ENTÃO (${entaoStr})</div>
             <div class="item-acoes">
                 <button class="btn-editar">Editar</button>
                 <button class="btn-apagar">Apagar</button>
@@ -135,49 +122,39 @@ async function carregarRegras() {
         renderizarRegras();
     } catch (error) {
         console.error('Erro ao carregar regras:', error);
-        listaRegras.innerHTML = '<li>Erro ao carregar.</li>';
     }
 }
 
 function carregarTudo() {
-    // Carrega variáveis primeiro, pois as regras dependem delas nos dropdowns
-    carregarVariaveis().then(() => {
-        carregarRegras();
-    });
+    carregarVariaveis().then(carregarRegras);
 }
 
-// --- FUNÇÕES DE EDIÇÃO (Variáveis e Regras) ---
-
-// NOVO: Funções para popular e limpar o formulário de variáveis
+// --- FUNÇÕES DE EDIÇÃO ---
 function popularFormularioVariavel(variavel) {
     modoEdicaoVariavel.ativo = true;
     modoEdicaoVariavel.nomeOriginal = variavel.nome;
-
-    if (tituloFormVariavel) tituloFormVariavel.textContent = `Editando Variável: "${variavel.nome}"`;
-    if (btnSalvarVariavel) btnSalvarVariavel.textContent = 'Salvar Alterações';
-    
+    tituloFormVariavel.textContent = `Editando Variável: "${variavel.nome}"`;
+    btnSalvarVariavel.textContent = 'Salvar Alterações';
     document.getElementById('var-nome').value = variavel.nome;
-    document.getElementById('var-nome').disabled = true; // Desabilita edição do nome para evitar inconsistências
+    document.getElementById('var-nome').disabled = true;
     document.getElementById('var-tipo').value = variavel.tipo;
-
-    selectVarTipo.dispatchEvent(new Event('change')); 
-    
+    selectVarTipo.dispatchEvent(new Event('change'));
     if (variavel.tipo === 'univalorada') {
         document.getElementById('var-valores').value = variavel.valores_possiveis.join(', ');
     } else if (variavel.tipo === 'numerica') {
         document.getElementById('var-min').value = variavel.min_val || '';
         document.getElementById('var-max').value = variavel.max_val || '';
     }
-
+    document.getElementById('var-pergunta').value = variavel.pergunta || '';
+    document.getElementById('var-explicacao').value = variavel.explicacao || '';
     formVariavel.scrollIntoView({ behavior: 'smooth' });
 }
 
 function cancelarEdicaoVariavel() {
     modoEdicaoVariavel.ativo = false;
     modoEdicaoVariavel.nomeOriginal = null;
-    
-    if (tituloFormVariavel) tituloFormVariavel.textContent = 'Adicionar Nova Variável';
-    if (btnSalvarVariavel) btnSalvarVariavel.textContent = 'Salvar Variável';
+    tituloFormVariavel.textContent = 'Adicionar Nova Variável';
+    btnSalvarVariavel.textContent = 'Salvar Variável';
     document.getElementById('var-nome').disabled = false;
     formVariavel.reset();
     selectVarTipo.dispatchEvent(new Event('change'));
@@ -186,8 +163,8 @@ function cancelarEdicaoVariavel() {
 function popularFormularioRegra(regra) {
     modoEdicaoRegra.ativo = true;
     modoEdicaoRegra.nomeOriginal = regra.nome;
-    if (tituloFormRegra) tituloFormRegra.textContent = `Editando Regra: "${regra.nome}"`;
-    if (btnSalvarRegra) btnSalvarRegra.textContent = 'Salvar Alterações';
+    tituloFormRegra.textContent = `Editando Regra: "${regra.nome}"`;
+    btnSalvarRegra.textContent = 'Salvar Alterações';
     document.getElementById('regra-nome').value = regra.nome;
     condicoesSeContainer.innerHTML = '';
     conclusoesEntaoContainer.innerHTML = '';
@@ -199,42 +176,32 @@ function popularFormularioRegra(regra) {
 function cancelarEdicaoRegra() {
     modoEdicaoRegra.ativo = false;
     modoEdicaoRegra.nomeOriginal = null;
-    if (tituloFormRegra) tituloFormRegra.textContent = 'Adicionar Nova Regra';
-    if (btnSalvarRegra) btnSalvarRegra.textContent = 'Salvar Regra';
+    tituloFormRegra.textContent = 'Adicionar Nova Regra';
+    btnSalvarRegra.textContent = 'Salvar Regra';
     formRegra.reset();
     condicoesSeContainer.innerHTML = '';
     conclusoesEntaoContainer.innerHTML = '';
 }
 
 // --- FUNÇÕES DE MANIPULAÇÃO DE FORMULÁRIO ---
-// (criarLinhaCondicao permanece igual ao seu código)
 function criarLinhaCondicao(condicaoExistente = null, isConclusao = false) {
     const div = document.createElement('div');
     div.className = 'condicao-linha';
     const selectVar = document.createElement('select');
     selectVar.className = 'condicao-variavel';
     variaveisDisponiveis.forEach(v => {
-        const option = document.createElement('option');
-        option.value = v.nome;
-        option.textContent = v.nome;
-        selectVar.appendChild(option);
+        selectVar.add(new Option(v.nome, v.nome));
     });
     const selectOp = document.createElement('select');
     selectOp.className = 'condicao-operador';
-    const operadores = ['==', '!=', '>', '<', '>=', '<='];
-    operadores.forEach(op => {
-        const option = document.createElement('option');
-        option.value = op;
-        option.textContent = op;
-        selectOp.appendChild(option);
+    ['==', '!=', '>', '<', '>=', '<='].forEach(op => {
+        selectOp.add(new Option(op, op));
     });
     const inputValor = document.createElement('input');
     inputValor.type = 'text';
     inputValor.className = 'condicao-valor';
     inputValor.placeholder = 'Valor';
-    div.appendChild(selectVar);
-    div.appendChild(selectOp);
-    div.appendChild(inputValor);
+    div.append(selectVar, selectOp, inputValor);
     if (isConclusao) {
         selectOp.style.display = 'none';
         const inputFC = document.createElement('input');
@@ -251,27 +218,31 @@ function criarLinhaCondicao(condicaoExistente = null, isConclusao = false) {
         selectVar.value = condicaoExistente.variavel;
         if (selectOp.style.display !== 'none') selectOp.value = condicaoExistente.operador;
         inputValor.value = condicaoExistente.valor;
-        if (isConclusao) {
-            div.querySelector('.condicao-fc').value = condicaoExistente.fc;
-        }
+        if (isConclusao) div.querySelector('.condicao-fc').value = condicaoExistente.fc;
     }
     return div;
 }
 
-
 // --- HANDLERS DE EVENTOS ---
-if(btnAddCondicaoSe) btnAddCondicaoSe.addEventListener('click', () => condicoesSeContainer.appendChild(criarLinhaCondicao(null, false)));
-if(btnAddConclusaoEntao) btnAddConclusaoEntao.addEventListener('click', () => conclusoesEntaoContainer.appendChild(criarLinhaCondicao(null, true)));
+btnAddCondicaoSe.addEventListener('click', () => condicoesSeContainer.appendChild(criarLinhaCondicao(null, false)));
+btnAddConclusaoEntao.addEventListener('click', () => conclusoesEntaoContainer.appendChild(criarLinhaCondicao(null, true)));
 
-// CORRIGIDO: Handler de submit do formulário de variável
 formVariavel.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nome = document.getElementById('var-nome').value;
     const tipo = document.getElementById('var-tipo').value;
-    const payload = { nome, tipo, valores_possiveis: [], min_val: null, max_val: null };
+    const pergunta = document.getElementById('var-pergunta').value;
+    const payload = {
+        nome,
+        tipo,
+        valores_possiveis: [],
+        min_val: null,
+        max_val: null,
+        pergunta,
+        explicacao: document.getElementById('var-explicacao').value
+    };
     if (tipo === 'univalorada') {
-        const valores = document.getElementById('var-valores').value.split(',').map(v => v.trim());
-        payload.valores_possiveis = valores.filter(v => v);
+        payload.valores_possiveis = document.getElementById('var-valores').value.split(',').map(v => v.trim()).filter(v => v);
     } else if (tipo === 'numerica') {
         const min = document.getElementById('var-min').value;
         const max = document.getElementById('var-max').value;
@@ -286,7 +257,7 @@ formVariavel.addEventListener('submit', async (e) => {
     }
     try {
         const response = await fetch(url, {
-            method: method,
+            method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
@@ -294,35 +265,34 @@ formVariavel.addEventListener('submit', async (e) => {
             cancelarEdicaoVariavel();
             carregarTudo();
         } else {
-            const data = await response.json().catch(() => ({}));
-            alert(`Erro ao salvar variável: ${data.erro || 'Falha ao salvar.'}`);
+            const data = await response.json();
+            alert(`Erro ao salvar variável: ${data.erro}`);
         }
     } catch (error) {
         console.error('Erro ao salvar variável:', error);
     }
 });
 
-
-// Handler de submit do formulário de regra (seu código já estava bom, pequenas melhorias)
 formRegra.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const nome = document.getElementById('regra-nome').value;
-    const condicoes_se = Array.from(condicoesSeContainer.querySelectorAll('.condicao-linha')).map(linha => ({
-        variavel: linha.querySelector('.condicao-variavel').value,
-        operador: linha.querySelector('.condicao-operador').value,
-        valor: linha.querySelector('.condicao-valor').value
-    }));
-    const conclusoes_entao = Array.from(conclusoesEntaoContainer.querySelectorAll('.condicao-linha')).map(linha => ({
-        variavel: linha.querySelector('.condicao-variavel').value,
-        operador: '==',
-        valor: linha.querySelector('.condicao-valor').value,
-        fc: parseFloat(linha.querySelector('.condicao-fc').value) || 1.0
-    }));
-    if (condicoes_se.length === 0 || conclusoes_entao.length === 0) {
-        alert('Uma regra deve ter pelo menos uma condição e uma conclusão.');
+    const payload = {
+        nome: document.getElementById('regra-nome').value,
+        condicoes_se: Array.from(condicoesSeContainer.querySelectorAll('.condicao-linha')).map(l => ({
+            variavel: l.querySelector('.condicao-variavel').value,
+            operador: l.querySelector('.condicao-operador').value,
+            valor: l.querySelector('.condicao-valor').value
+        })),
+        conclusoes_entao: Array.from(conclusoesEntaoContainer.querySelectorAll('.condicao-linha')).map(l => ({
+            variavel: l.querySelector('.condicao-variavel').value,
+            operador: '==',
+            valor: l.querySelector('.condicao-valor').value,
+            fc: parseFloat(l.querySelector('.condicao-fc').value) || 1.0
+        }))
+    };
+    if (payload.condicoes_se.length === 0 || payload.conclusoes_entao.length === 0) {
+        alert('Uma regra precisa de condições e conclusões.');
         return;
     }
-    const payload = { nome, condicoes_se, conclusoes_entao };
     let url = `${API_URL}/api/regras`;
     let method = 'POST';
     if (modoEdicaoRegra.ativo) {
@@ -331,7 +301,7 @@ formRegra.addEventListener('submit', async (e) => {
     }
     try {
         const response = await fetch(url, {
-            method: method,
+            method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
@@ -339,21 +309,19 @@ formRegra.addEventListener('submit', async (e) => {
             cancelarEdicaoRegra();
             carregarRegras();
         } else {
-            const data = await response.json().catch(() => ({}));
-            alert(`Erro ao salvar regra: ${data.erro || 'Falha ao salvar.'}`);
+            const data = await response.json();
+            alert(`Erro ao salvar regra: ${data.erro}`);
         }
     } catch (error) {
         console.error('Erro ao salvar regra:', error);
     }
 });
 
-
 selectVarTipo.addEventListener('change', () => {
     const tipo = selectVarTipo.value;
     campoValoresPossiveis.classList.toggle('hidden', tipo !== 'univalorada');
     campoRangeNumerico.classList.toggle('hidden', tipo !== 'numerica');
 });
-
 
 // --- INICIALIZAÇÃO ---
 document.addEventListener('DOMContentLoaded', carregarTudo);
